@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3 class="text-center">Works log</h3>
+{% if current_user.is_authenticated %}
+    <a href="jobs" class="btn btn-secondary" style="margin-left: 5%; margin-right: 5%">Добавить работу</a>
+{% endif %}
+
+{% for job in params %}
+<div style="margin-left: 5%; margin-right: 5%">
+<h5>Action # {{ job[0] }}</h5>
+<table class="table text-center">
+    <thead class="thead-light">
+        <tr class="d-flex table-secondary">
+            <th scope="col" class="col-4">Title of activity</th>
+            <th scope="col" class="col-2">Team leader</th>
+            <th scope="col" class="col-1">Duration</th>
+            <th scope="col" class="col-2">List of collaborators</th>
+            <th scope="col" class="col-1">Hazard category</th>
+            <th scope="col" class="col-2">Is finished</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="d-flex table-primary">
+            <td class="col-4">{{ job[1] }}</td>
+            <td class="col-2">{{ job[2] }}</td>
+            <td class="col-1">{{ job[3] }}</td>
+            <td class="col-2">{{ job[4] }}</td>
+            <td class="col-1">{{ job[7] }}</td>
+            {% set color = "table-success" if job[5] else "table-danger" %}
+            <td class="col-2 {{ color }}">{{ "Is finished" if job[5] else "Is not finished" }}</td>
+        </tr>
+    </tbody>
+</table>
+{% if current_user.is_authenticated and (current_user.id == job[6] or current_user.id == 1) %}
+    <div>
+        <a href="/jobs/{{ job[0] }}" class="btn btn-warning">
+            Изменить
+        </a>
+        <a href="/jobs_delete/{{ job[0] }}" class="btn btn-danger">
+            Удалить
+        </a>
+    </div>
+{% endif %}
+    </div>
+{% endfor %}
+{% endblock %}

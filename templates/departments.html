@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3 class="text-center">List of Departments</h3>
+{% if current_user.is_authenticated %}
+    <a href="add_dep" class="btn btn-secondary" style="margin-left: 5%; margin-right: 5%">Добавить департамент</a>
+{% endif %}
+
+{% for el in departs %}
+<div style="margin-left: 5%; margin-right: 5%">
+<h5>Departament # {{ el.id }}</h5>
+<table class="table ">
+    <thead class="thead-light">
+        <tr class="d-flex table-secondary">
+            <th scope="col" class="col-4">Title of department</th>
+            <th scope="col" class="col-3">Chief</th>
+            <th scope="col" class="col-2">Members</th>
+            <th scope="col" class="col-3">Department emai</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="d-flex table-primary">
+            <td class="col-4">{{ el.title }}</td>
+            <td class="col-3">{{ el.user.surname }} {{ el.user.name }}</td>
+            <td class="col-2">{{ el.members }}</td>
+            <td class="col-3">{{ el.email }}</td>
+        </tr>
+    </tbody>
+</table>
+{% if current_user.is_authenticated and (current_user.id == el.chief or current_user.id == 1) %}
+    <div>
+        <a href="/departments/{{ el.id }}" class="btn btn-warning">
+            Изменить
+        </a>
+        <a href="/dep_delete/{{ el.id }}" class="btn btn-danger">
+            Удалить
+        </a>
+    </div>
+{% endif %}
+    </div>
+{% endfor %}
+{% endblock %}
